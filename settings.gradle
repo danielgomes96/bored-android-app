@@ -8,3 +8,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Bored App"
 include ':app'
+include ':domain'
+include ':data'
+include ':activities'
+include ':core'
