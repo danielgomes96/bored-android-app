@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface BoredAPI {
     @GET("activity/")
-    suspend fun getActivity(@Query("type") type: String): Response<DTOActivity>
+    suspend fun getActivity(@Query("type") type: String?): Response<DTOActivity>
 }

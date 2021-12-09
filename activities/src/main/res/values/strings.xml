@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filters">
+        <item>RANDOM</item>
+        <item>RELAXATION</item>
+        <item>COOKING</item>
+        <item>SOCIAL</item>
+        <item>CHARITY</item>
+        <item>EDUCATION</item>
+        <item>BUSYWORK</item>
+        <item>RECREATIONAL</item>
+        <item>MUSIC</item>
+    </string-array>
+
+    <string name="get_activity_btn_label">Obter atividade</string>
+</resources>

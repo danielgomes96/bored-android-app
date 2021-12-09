@@ -15,7 +15,7 @@ class ActivityRepositoryImpl(
     private val boredAPI: BoredAPI
 ): ActivityRepository {
 
-    override suspend fun getActivity(type: String): Flow<ResultWrapper<Activity>> = flow  {
+    override suspend fun getActivity(type: String?): Flow<ResultWrapper<Activity>> = flow  {
         emit(ResultWrapper.Loading)
         runCatching {
             boredAPI.getActivity(type)
