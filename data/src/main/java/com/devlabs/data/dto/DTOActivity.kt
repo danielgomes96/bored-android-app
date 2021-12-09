@@ -7,5 +7,5 @@ data class DTOActivity(
     val price: Float,
     val link: String,
     val key: String,
-    val accessibility: Int
+    val accessibility: Float
 )

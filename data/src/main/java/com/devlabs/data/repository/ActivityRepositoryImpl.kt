@@ -20,7 +20,7 @@ class ActivityRepositoryImpl(
         runCatching {
             boredAPI.getActivity(type)
         }.onSuccess {
-            emit(ResultWrapper.Success(ActivityMapper().transform(it.body() ?: DTOActivity("", "", 0, 0f, "", "", 0))))
+            emit(ResultWrapper.Success(ActivityMapper().transform(it.body() ?: DTOActivity("", "", 0, 0f, "", "", 0.1f))))
         }.onFailure { throwable ->
             when (throwable) {
                 is IOException -> emit(ResultWrapper.NetworkError)
