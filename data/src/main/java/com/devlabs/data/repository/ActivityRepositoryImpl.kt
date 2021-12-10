@@ -1,5 +1,6 @@
 package com.devlabs.data.repository
 
+import ActivityDomainMapper
 import com.devlabs.data.database.ActivitiesDao
 import com.devlabs.data.dto.DTOActivity
 import com.devlabs.data.mapper.ActivityLocalMapper
@@ -42,6 +43,19 @@ class ActivityRepositoryImpl(
             )
         }.onSuccess {
             emit(ResultWrapper.Success(Unit))
+        }.onFailure { throwable ->
+            when (throwable) {
+                is Exception -> emit(ResultWrapper.GenericError(null, throwable.message))
+            }
+        }
+    }
+
+    override suspend fun getStartedActivities(): Flow<ResultWrapper<List<Activity>>> = flow {
+        emit(ResultWrapper.Loading)
+        runCatching {
+            activityDao.getActivities()
+        }.onSuccess {
+            emit(ResultWrapper.Success(ActivityDomainMapper().transform(it)))
         }.onFailure { throwable ->
             when (throwable) {
                 is Exception -> emit(ResultWrapper.GenericError(null, throwable.message))

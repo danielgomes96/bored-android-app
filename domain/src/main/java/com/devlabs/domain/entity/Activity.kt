@@ -7,5 +7,6 @@ data class Activity(
     val price: Float,
     val link: String,
     val key: String,
-    val accessibility: Float
+    val accessibility: Float,
+    val progressStatus: ProgressStatus
 )

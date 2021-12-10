@@ -1,9 +1,6 @@
 package com.devlabs.domain.di
 
-import com.devlabs.domain.usecase.GetActivityUseCase
-import com.devlabs.domain.usecase.GetActivityUseCaseImpl
-import com.devlabs.domain.usecase.StartActivityUseCase
-import com.devlabs.domain.usecase.StartActivityUseCaseImpl
+import com.devlabs.domain.usecase.*
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -16,5 +13,10 @@ val domainModule = module {
         StartActivityUseCaseImpl(
             get()
         ) as StartActivityUseCase
+    }
+    factory {
+        GetStartedActivitiesUseCaseImpl(
+            get()
+        ) as GetStartedActivitiesUseCase
     }
 }

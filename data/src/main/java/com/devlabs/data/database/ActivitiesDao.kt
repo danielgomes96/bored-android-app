@@ -14,5 +14,5 @@ interface ActivitiesDao {
     fun insertActivity(activity: ActivityLocal)
 
     @Query("SELECT * FROM activities")
-    fun getActivities(): LiveData<List<ActivityLocal>>
+    fun getActivities(): List<ActivityLocal>
 }
