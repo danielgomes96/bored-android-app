@@ -2,7 +2,8 @@ package com.devlabs.data.repository
 
 import com.devlabs.data.database.ActivitiesDao
 import com.devlabs.data.dto.DTOActivity
-import com.devlabs.data.mapper.ActivityMapper
+import com.devlabs.data.mapper.ActivityLocalMapper
+import com.devlabs.data.mapper.ActivityRemoteMapper
 import com.devlabs.data.service.BoredAPI
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ResultWrapper
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.Exception
 
 class ActivityRepositoryImpl(
     private val boredAPI: BoredAPI,
@@ -22,7 +24,7 @@ class ActivityRepositoryImpl(
         runCatching {
             boredAPI.getActivity(type)
         }.onSuccess {
-            emit(ResultWrapper.Success(ActivityMapper().transform(it.body() ?: DTOActivity("", "", 0, 0f, "", "", 0.1f))))
+            emit(ResultWrapper.Success(ActivityRemoteMapper().transform(it.body() ?: DTOActivity("", "", 0, 0f, "", "", 0.1f))))
         }.onFailure { throwable ->
             when (throwable) {
                 is IOException -> emit(ResultWrapper.NetworkError)
@@ -32,7 +34,18 @@ class ActivityRepositoryImpl(
         }
     }
 
-    override suspend fun startActivity(activity: Activity) {
-        activityDao.insertTravels()
+    override suspend fun startActivity(activity: Activity): Flow<ResultWrapper<Unit>> = flow {
+        emit(ResultWrapper.Loading)
+        runCatching {
+            activityDao.insertActivity(
+                ActivityLocalMapper().transform(activity)
+            )
+        }.onSuccess {
+            emit(ResultWrapper.Success(Unit))
+        }.onFailure { throwable ->
+            when (throwable) {
+                is Exception -> emit(ResultWrapper.GenericError(null, throwable.message))
+            }
+        }
     }
 }

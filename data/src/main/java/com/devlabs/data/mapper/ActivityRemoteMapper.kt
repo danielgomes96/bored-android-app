@@ -3,7 +3,7 @@ package com.devlabs.data.mapper
 import com.devlabs.data.dto.DTOActivity
 import com.devlabs.domain.entity.Activity
 
-class ActivityMapper : BaseMapper<DTOActivity, Activity>() {
+class ActivityRemoteMapper : BaseMapper<DTOActivity, Activity>() {
     override fun transform(entity: DTOActivity): Activity {
         return Activity(
             entity.activity,

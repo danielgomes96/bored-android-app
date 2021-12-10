@@ -1,20 +1,18 @@
 package com.devlabs.activities.fragment
 
 import android.os.Bundle
-import android.provider.Contacts
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.devlabs.activities.AddActivityViewModel
 import com.devlabs.activities.R
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ResultWrapper
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @FlowPreview
@@ -70,6 +68,16 @@ class AddActivityFragment : Fragment() {
                     }
                 }
             }
+            addActivityViewModel.startActivityLiveData.collect { result ->
+                when (result) {
+                    is ResultWrapper.Success -> {
+                        Toast.makeText(requireContext(), "foda!", Toast.LENGTH_LONG).show()
+                    }
+                    else -> {
+
+                    }
+                }
+            }
         }
     }
 
@@ -88,7 +96,7 @@ class AddActivityFragment : Fragment() {
         val btStart = bottomSheetDialog.findViewById<TextView>(R.id.activity_txt_start)
         tvTitle?.text = activity.activity
         btStart?.setOnClickListener {
-            addActivityViewModel.startActivity()
+            addActivityViewModel.startActivity(activity)
         }
         bottomSheetDialog.show()
     }

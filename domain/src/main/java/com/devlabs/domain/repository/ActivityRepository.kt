@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ActivityRepository {
     suspend fun getActivity(type: String?): Flow<ResultWrapper<Activity>>
-    suspend fun startActivity(activity: Activity)
+    suspend fun startActivity(activity: Activity): Flow<ResultWrapper<Unit>>
 }

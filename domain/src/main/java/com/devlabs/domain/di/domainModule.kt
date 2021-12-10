@@ -13,6 +13,8 @@ val domainModule = module {
         ) as GetActivityUseCase
     }
     factory {
-        StartActivityUseCaseImpl() as StartActivityUseCase
+        StartActivityUseCaseImpl(
+            get()
+        ) as StartActivityUseCase
     }
 }

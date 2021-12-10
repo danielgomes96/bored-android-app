@@ -12,12 +12,17 @@ private const val ACTIVITIES_DATABASE = "db_activities"
 val repositoryModule = module {
     factory {
         ActivityRepositoryImpl(
+            get(),
             get()
         ) as ActivityRepository
     }
 
     single {
-        Room.databaseBuilder(androidContext(), ActivitiesDatabase ::class.java, ACTIVITIES_DATABASE)
+        get<ActivitiesDatabase>().activitiesDao()
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), ActivitiesDatabase::class.java, ACTIVITIES_DATABASE)
             .fallbackToDestructiveMigration()
             .allowMainThreadQueries()
             .build()

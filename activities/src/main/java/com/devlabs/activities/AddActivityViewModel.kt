@@ -1,9 +1,5 @@
-package com.devlabs.activities.fragment
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.devlabs.activities.BaseViewModel
+package com.devlabs.activities
+import com.devlabs.core.Consts.Companion.RANDOM_TYPE
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ResultWrapper
 import com.devlabs.domain.usecase.GetActivityUseCase
@@ -18,13 +14,13 @@ class AddActivityViewModel(
     private val startActivityUseCase: StartActivityUseCase
 ) : BaseViewModel() {
 
-    private companion object {
-        const val RANDOM_TYPE = "RANDOM"
-    }
-
     private val _activityLiveData = MutableStateFlow<ResultWrapper<Activity>>(ResultWrapper.InitialState())
     val activityLiveData: StateFlow<ResultWrapper<Activity>>
         get() = _activityLiveData
+
+    private val _startActivityLiveData = MutableStateFlow<ResultWrapper<Unit>>(ResultWrapper.InitialState())
+    val startActivityLiveData: StateFlow<ResultWrapper<Unit>>
+        get() = _startActivityLiveData
 
     fun getActivityByType(type: String?) = launch {
         if (type.equals(RANDOM_TYPE, ignoreCase = true)) {
@@ -38,7 +34,9 @@ class AddActivityViewModel(
         }
     }
 
-    fun startActivity() {
-        startActivityUseCase.execute()
+    fun startActivity(activity: Activity) = launch {
+        startActivityUseCase.execute(activity).collect {
+            _startActivityLiveData.value = it
+        }
     }
 }
