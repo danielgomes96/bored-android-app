@@ -85,7 +85,7 @@ class AddActivityFragment : Fragment() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog)
         val tvTitle = bottomSheetDialog.findViewById<TextView>(R.id.activity_title)
-        val btStart = bottomSheetDialog.findViewById<TextView>(R.id.activity_btn_start)
+        val btStart = bottomSheetDialog.findViewById<TextView>(R.id.activity_txt_start)
         tvTitle?.text = activity.activity
         btStart?.setOnClickListener {
             addActivityViewModel.startActivity()

@@ -13,4 +13,5 @@
     </string-array>
 
     <string name="get_activity_btn_label">Obter atividade</string>
+    <string name="label_start">Iniciar</string>
 </resources>

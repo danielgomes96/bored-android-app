@@ -1,5 +1,6 @@
 package com.devlabs.data.repository
 
+import com.devlabs.data.database.ActivitiesDao
 import com.devlabs.data.dto.DTOActivity
 import com.devlabs.data.mapper.ActivityMapper
 import com.devlabs.data.service.BoredAPI
@@ -12,7 +13,8 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class ActivityRepositoryImpl(
-    private val boredAPI: BoredAPI
+    private val boredAPI: BoredAPI,
+    private val activityDao: ActivitiesDao
 ): ActivityRepository {
 
     override suspend fun getActivity(type: String?): Flow<ResultWrapper<Activity>> = flow  {
@@ -28,5 +30,9 @@ class ActivityRepositoryImpl(
                 else -> emit(ResultWrapper.GenericError(null, throwable.message))
             }
         }
+    }
+
+    override suspend fun startActivity(activity: Activity) {
+        activityDao.insertTravels()
     }
 }

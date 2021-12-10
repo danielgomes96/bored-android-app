@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
@@ -12,24 +12,28 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:maxLines="3"
         android:textColor="@android:color/background_dark"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="Testando um nome muito grande so para ver se cabe"/>
 
-    <Button
-        android:id="@+id/activity_btn_start"
+    <TextView
+        android:id="@+id/activity_txt_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:paddingBottom="16dp"
+        android:padding="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textSize="20sp"
+        android:layout_marginBottom="16dp"
         android:background="@color/purple_500"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/label_start"
+        android:textAllCaps="true"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_title"
-        tools:text="Start"/>
+        android:textSize="20sp"
+        tools:text="Iniciar" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
