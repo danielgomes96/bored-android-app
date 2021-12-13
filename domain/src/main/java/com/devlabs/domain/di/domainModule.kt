@@ -19,4 +19,14 @@ val domainModule = module {
             get()
         ) as GetStartedActivitiesUseCase
     }
+    factory {
+        FinishActivityUseCaseImpl(
+            get()
+        ) as FinishActivityUseCase
+    }
+    factory {
+        AbandonActivityUseCaseImpl(
+            get()
+        ) as AbandonActivityUseCase
+    }
 }

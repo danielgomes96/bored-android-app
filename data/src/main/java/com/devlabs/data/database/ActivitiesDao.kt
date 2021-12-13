@@ -1,12 +1,11 @@
 package com.devlabs.data.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.devlabs.data.database.model.ActivityLocal
-import com.devlabs.domain.entity.Activity
+import com.devlabs.domain.entity.ProgressStatus
 
 @Dao
 interface ActivitiesDao {
@@ -15,4 +14,7 @@ interface ActivitiesDao {
 
     @Query("SELECT * FROM activities")
     fun getActivities(): List<ActivityLocal>
+
+    @Query("UPDATE activities SET progress=:progress WHERE `key` = :key")
+    fun updateActivityProgress(progress: ProgressStatus, key: String)
 }

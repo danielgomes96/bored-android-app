@@ -55,7 +55,37 @@ class ActivityRepositoryImpl(
         runCatching {
             activityDao.getActivities()
         }.onSuccess {
-            emit(ResultWrapper.Success(ActivityDomainMapper().transform(it)))
+            if (it.isEmpty()) {
+                emit(ResultWrapper.Empty)
+            } else {
+                emit(ResultWrapper.Success(ActivityDomainMapper().transform(it)))
+            }
+        }.onFailure { throwable ->
+            when (throwable) {
+                is Exception -> emit(ResultWrapper.GenericError(null, throwable.message))
+            }
+        }
+    }
+
+    override suspend fun finishActivity(activity: Activity): Flow<ResultWrapper<Unit>> = flow {
+        emit(ResultWrapper.Loading)
+        runCatching {
+            activityDao.updateActivityProgress(activity.progressStatus, activity.key)
+        }.onSuccess {
+            emit(ResultWrapper.Success(Unit))
+        }.onFailure { throwable ->
+            when (throwable) {
+                is Exception -> emit(ResultWrapper.GenericError(null, throwable.message))
+            }
+        }
+    }
+
+    override suspend fun abandonActivity(activity: Activity): Flow<ResultWrapper<Unit>> = flow {
+        emit(ResultWrapper.Loading)
+        runCatching {
+            activityDao.updateActivityProgress(activity.progressStatus, activity.key)
+        }.onSuccess {
+            emit(ResultWrapper.Success(Unit))
         }.onFailure { throwable ->
             when (throwable) {
                 is Exception -> emit(ResultWrapper.GenericError(null, throwable.message))

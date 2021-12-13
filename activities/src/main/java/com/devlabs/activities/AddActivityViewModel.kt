@@ -1,42 +1,76 @@
 package com.devlabs.activities
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.devlabs.core.Consts.Companion.RANDOM_TYPE
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ResultWrapper
-import com.devlabs.domain.usecase.GetActivityUseCase
-import com.devlabs.domain.usecase.StartActivityUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.devlabs.domain.usecase.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class AddActivityViewModel(
     private val getActivityUseCase: GetActivityUseCase,
-    private val startActivityUseCase: StartActivityUseCase
-) : BaseViewModel() {
+    private val startActivityUseCase: StartActivityUseCase,
+    private val getStartedActivitiesUseCase: GetStartedActivitiesUseCase,
+    private val finishActivityUseCase: FinishActivityUseCase,
+    private val abandonActivityUseCase: AbandonActivityUseCase
+) : ViewModel() {
 
-    private val _activityLiveData = MutableStateFlow<ResultWrapper<Activity>>(ResultWrapper.InitialState())
-    val activityLiveData: StateFlow<ResultWrapper<Activity>>
+    private val _activityLiveData = MutableLiveData<ResultWrapper<Activity>>(ResultWrapper.InitialState())
+    val activityLiveData: LiveData<ResultWrapper<Activity>>
         get() = _activityLiveData
 
-    private val _startActivityLiveData = MutableStateFlow<ResultWrapper<Unit>>(ResultWrapper.InitialState())
-    val startActivityLiveData: StateFlow<ResultWrapper<Unit>>
+    private val _startActivityLiveData = MutableLiveData<ResultWrapper<Unit>>(ResultWrapper.InitialState())
+    val startActivityLiveData: LiveData<ResultWrapper<Unit>>
         get() = _startActivityLiveData
 
-    fun getActivityByType(type: String?) = launch {
-        if (type.equals(RANDOM_TYPE, ignoreCase = true)) {
-            getActivityUseCase.execute(null).collect {
-                _activityLiveData.value = it
-            }
-        } else {
-            getActivityUseCase.execute(type).collect {
-                _activityLiveData.value = it
+    private val _getActivitiesLiveData = MutableLiveData<ResultWrapper<List<Activity>>>(ResultWrapper.InitialState())
+    val getActivitiesLiveData: LiveData<ResultWrapper<List<Activity>>>
+        get() = _getActivitiesLiveData
+
+    private var viewModelJob = Job()
+
+    fun getActivityByType(type: String?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (type.equals(RANDOM_TYPE, ignoreCase = true)) {
+                getActivityUseCase.execute(null).collect {
+                    _activityLiveData.postValue(it)
+                }
+            } else {
+                getActivityUseCase.execute(type).collect {
+                    _activityLiveData.postValue(it)
+                }
             }
         }
     }
 
-    fun startActivity(activity: Activity) = launch {
+    fun startActivity(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
         startActivityUseCase.execute(activity).collect {
-            _startActivityLiveData.value = it
+            _startActivityLiveData.postValue(it)
         }
+    }
+
+    fun getStartedActivities() = CoroutineScope(Dispatchers.IO).launch {
+        getStartedActivitiesUseCase.execute().collect {
+            _getActivitiesLiveData.postValue(it)
+        }
+    }
+
+    fun abandonActivity(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
+        abandonActivityUseCase.execute(activity).collect {
+
+        }
+    }
+
+    fun finishActivity(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
+        finishActivityUseCase.execute(activity).collect {
+
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

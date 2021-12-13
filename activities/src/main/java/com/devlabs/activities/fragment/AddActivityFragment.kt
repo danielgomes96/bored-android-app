@@ -6,23 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.devlabs.activities.AddActivityViewModel
 import com.devlabs.activities.R
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ResultWrapper
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class AddActivityFragment : Fragment() {
 
     private lateinit var btGetActivities: Button
     private lateinit var spinnerTypes: Spinner
     private lateinit var progressBar: ProgressBar
     private val addActivityViewModel by viewModel<AddActivityViewModel>()
+    private var showBottomSheet: Boolean = false
+    private val observer = Observer<ResultWrapper<Activity>> { handleResponse(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +38,7 @@ class AddActivityFragment : Fragment() {
         spinnerTypes = view.findViewById(R.id.spinner_types)
         progressBar = view.findViewById(R.id.progress_bar)
         btGetActivities.setOnClickListener {
+            showBottomSheet = true
             addActivityViewModel.getActivityByType(spinnerTypes.selectedItem.toString().toLowerCase())
         }
         setupSpinner()
@@ -53,30 +54,20 @@ class AddActivityFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        CoroutineScope(Dispatchers.Main).launch {
-            addActivityViewModel.activityLiveData.collect { result ->
-                when (result) {
-                    is ResultWrapper.Loading -> {
-                        showLoading()
-                    }
-                    is ResultWrapper.Success -> {
-                        dismissLoading()
-                        showBottomSheetDialog(result.value)
-                    }
-                    else -> {
+        addActivityViewModel.activityLiveData.observe(viewLifecycleOwner, observer)
+    }
 
-                    }
-                }
+    private fun handleResponse(result: ResultWrapper<Activity>?) {
+        when (result) {
+            is ResultWrapper.Loading -> {
+                showLoading()
             }
-            addActivityViewModel.startActivityLiveData.collect { result ->
-                when (result) {
-                    is ResultWrapper.Success -> {
-                        Toast.makeText(requireContext(), "foda!", Toast.LENGTH_LONG).show()
-                    }
-                    else -> {
+            is ResultWrapper.Success -> {
+                dismissLoading()
+                showBottomSheetDialog(result.value)
+            }
+            else -> {
 
-                    }
-                }
             }
         }
     }
@@ -97,7 +88,15 @@ class AddActivityFragment : Fragment() {
         tvTitle?.text = activity.activity
         btStart?.setOnClickListener {
             addActivityViewModel.startActivity(activity)
+            bottomSheetDialog.hide()
+            showBottomSheet = false
         }
-        bottomSheetDialog.show()
+        bottomSheetDialog.setOnDismissListener {
+            showBottomSheet = false
+        }
+        if (showBottomSheet) {
+            bottomSheetDialog.show()
+        }
     }
+
 }

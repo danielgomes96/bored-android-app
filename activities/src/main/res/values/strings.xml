@@ -14,4 +14,11 @@
 
     <string name="get_activity_btn_label">Obter atividade</string>
     <string name="label_start">Iniciar</string>
+    <string name="empty_list_activities">Não há atividades no momento.</string>
+    <string name="dialog_activity_description">Você deseja concluir ou desistir da atividade?</string>
+    <string name="dialog_activity_abandon">Desistir</string>
+    <string name="dialog_activity_finish">Concluir</string>
+    <string name="in_progress_status">Em progresso</string>
+    <string name="abandoned_status">Abandonada</string>
+    <string name="finished_status">Concluida</string>
 </resources>

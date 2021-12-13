@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.devlabs.domain.entity.ProgressStatus
+import java.util.*
 
 @Entity(tableName = "activities")
 data class ActivityLocal(
@@ -23,5 +24,9 @@ data class ActivityLocal(
     @ColumnInfo(name = "price")
     val price: Float,
     @ColumnInfo(name = "type")
-    val type: String
+    val type: String,
+    @ColumnInfo(name = "start_time")
+    val startTime: Long,
+    @ColumnInfo(name = "end_time")
+    var endTime: Long
 )

@@ -3,6 +3,7 @@ package com.devlabs.data.mapper
 import com.devlabs.data.database.model.ActivityLocal
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ProgressStatus
+import java.util.*
 
 class ActivityLocalMapper : BaseMapper<Activity, ActivityLocal>() {
     override fun transform(entity: Activity): ActivityLocal {
@@ -14,7 +15,9 @@ class ActivityLocalMapper : BaseMapper<Activity, ActivityLocal>() {
             entity.link,
             entity.participants,
             entity.price,
-            entity.type
+            entity.type,
+            System.currentTimeMillis(),
+            System.currentTimeMillis()
         )
     }
 }

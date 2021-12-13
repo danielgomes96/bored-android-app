@@ -1,5 +1,7 @@
 package com.devlabs.domain.entity
 
+import java.util.*
+
 data class Activity(
     val activity: String,
     val type: String,
@@ -8,5 +10,7 @@ data class Activity(
     val link: String,
     val key: String,
     val accessibility: Float,
-    val progressStatus: ProgressStatus
+    var progressStatus: ProgressStatus,
+    val startDate: Date,
+    val endDate: Date
 )
