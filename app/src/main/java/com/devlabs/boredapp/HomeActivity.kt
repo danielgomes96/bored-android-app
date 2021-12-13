@@ -22,9 +22,8 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.add_activity-> setCurrentFragment(firstFragment)
-                R.id.list_activity-> setCurrentFragment(secondFragment)
-
+                R.id.add_activity -> setCurrentFragment(firstFragment)
+                R.id.list_activity -> setCurrentFragment(secondFragment)
             }
             true
         }
@@ -32,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.flFragment,fragment)
+            replace(R.id.flFragment, fragment)
             commit()
         }
 }
