@@ -17,7 +17,8 @@ class ActivityLocalMapper : BaseMapper<Activity, ActivityLocal>() {
             entity.price,
             entity.type,
             System.currentTimeMillis(),
-            System.currentTimeMillis()
+            System.currentTimeMillis(),
+            0
         )
     }
 }

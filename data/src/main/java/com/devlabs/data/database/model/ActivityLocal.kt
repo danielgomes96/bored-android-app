@@ -28,5 +28,7 @@ data class ActivityLocal(
     @ColumnInfo(name = "start_time")
     val startTime: Long,
     @ColumnInfo(name = "end_time")
-    var endTime: Long
+    var endTime: Long,
+    @ColumnInfo(name = "time_spent")
+    var timeSpent: Int
 )

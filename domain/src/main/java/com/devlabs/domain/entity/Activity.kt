@@ -12,5 +12,6 @@ data class Activity(
     val accessibility: Float,
     var progressStatus: ProgressStatus,
     val startDate: Date,
-    val endDate: Date
+    val endDate: Date,
+    val timeSpent: Int
 )

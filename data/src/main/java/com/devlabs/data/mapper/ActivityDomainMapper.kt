@@ -16,7 +16,8 @@ class ActivityDomainMapper : BaseMapper<List<ActivityLocal>, List<Activity>>() {
                 it.accessibility,
                 it.progress,
                 Date(it.startTime),
-                Date(it.endTime)
+                Date(it.endTime),
+                it.timeSpent
             )
         }
     }

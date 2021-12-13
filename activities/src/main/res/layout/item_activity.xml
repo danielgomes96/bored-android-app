@@ -37,9 +37,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:paddingBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_start_time"
         tools:text="Activity End Time"/>
+
+    <TextView
+        android:id="@+id/activity_time_spent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_end_time"
+        tools:text="Tempo gasto: 5 minutos"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

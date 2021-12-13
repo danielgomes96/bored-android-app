@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class AbandonActivityUseCaseImpl(
     private val activityRepository: ActivityRepository
 ) : AbandonActivityUseCase {
-    override suspend fun execute(activity: Activity): Flow<ResultWrapper<Unit>> {
-        return activityRepository.abandonActivity(activity)
+    override suspend fun execute(activity: Activity, minutes: Int): Flow<ResultWrapper<Unit>> {
+        return activityRepository.abandonActivity(activity, minutes)
     }
 }

@@ -29,6 +29,10 @@ class AddActivityViewModel(
     val getActivitiesLiveData: LiveData<ResultWrapper<List<Activity>>>
         get() = _getActivitiesLiveData
 
+    private val _updateActivityProgressLiveData = MutableLiveData<ResultWrapper<Unit>>(ResultWrapper.InitialState())
+    val updateActivityProgressLiveData: LiveData<ResultWrapper<Unit>>
+        get() = _updateActivityProgressLiveData
+
     private var viewModelJob = Job()
 
     fun getActivityByType(type: String?) {
@@ -57,15 +61,15 @@ class AddActivityViewModel(
         }
     }
 
-    fun abandonActivity(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
-        abandonActivityUseCase.execute(activity).collect {
-
+    fun abandonActivity(activity: Activity, minutes: Int) = CoroutineScope(Dispatchers.IO).launch {
+        abandonActivityUseCase.execute(activity, minutes).collect {
+            _updateActivityProgressLiveData.postValue(it)
         }
     }
 
-    fun finishActivity(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
-        finishActivityUseCase.execute(activity).collect {
-
+    fun finishActivity(activity: Activity, minutes: Int) = CoroutineScope(Dispatchers.IO).launch {
+        finishActivityUseCase.execute(activity, minutes).collect {
+            _updateActivityProgressLiveData.postValue(it)
         }
     }
 

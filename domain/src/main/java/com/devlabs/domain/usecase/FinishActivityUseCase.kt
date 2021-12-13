@@ -5,5 +5,5 @@ import com.devlabs.domain.entity.ResultWrapper
 import kotlinx.coroutines.flow.Flow
 
 interface FinishActivityUseCase {
-    suspend fun execute(activity: Activity): Flow<ResultWrapper<Unit>>
+    suspend fun execute(activity: Activity, minutes: Int): Flow<ResultWrapper<Unit>>
 }

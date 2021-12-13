@@ -9,8 +9,8 @@ class FinishActivityUseCaseImpl(
     private val activityRepository: ActivityRepository
 ) : FinishActivityUseCase {
 
-    override suspend fun execute(activity: Activity): Flow<ResultWrapper<Unit>> {
-        return activityRepository.finishActivity(activity)
+    override suspend fun execute(activity: Activity, minutes: Int): Flow<ResultWrapper<Unit>> {
+        return activityRepository.finishActivity(activity, minutes)
     }
 
 }

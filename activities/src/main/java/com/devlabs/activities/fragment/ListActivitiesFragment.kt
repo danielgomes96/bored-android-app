@@ -1,5 +1,6 @@
 package com.devlabs.activities.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,10 @@ class ListActivitiesFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private val viewModel by viewModel<AddActivityViewModel>()
     private val observer = Observer<ResultWrapper<List<Activity>>> { handleResponse(it) }
+    private val updateProgressObserver = Observer<ResultWrapper<Unit>> { handleUpdateProgressResponse(it) }
+    private val adapter by lazy {
+        ActivitiesAdapter(emptyList(), ::handleItemClicked, requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,14 +60,16 @@ class ListActivitiesFragment : Fragment() {
 
     private fun setupObserver() {
         viewModel.getActivitiesLiveData.observe(viewLifecycleOwner, observer)
+        viewModel.updateActivityProgressLiveData.observe(viewLifecycleOwner, updateProgressObserver)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun handleResponse(result: ResultWrapper<List<Activity>>?) {
         when (result) {
             is ResultWrapper.Success -> {
                 tvEmptyView.visibility = View.GONE
                 progressBar.visibility = View.GONE
-                val adapter = ActivitiesAdapter(result.value, ::handleItemClicked, requireContext())
+                adapter.setupData(result.value)
                 rvActivities.adapter = adapter
             }
             is ResultWrapper.Loading -> {
@@ -78,22 +85,31 @@ class ListActivitiesFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun handleUpdateProgressResponse(result: ResultWrapper<Unit>?) {
+        when (result) {
+            is ResultWrapper.Success -> {
+                adapter.notifyDataSetChanged()
+            }
+            else -> { }
+        }
+    }
+
     private fun handleItemClicked(activity: Activity) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(getString(R.string.dialog_activity_description))
-        builder.setPositiveButton(getString(R.string.dialog_activity_finish)){ dialog, which ->
-            val diff: Long = Date(System.currentTimeMillis()).time - activity.startDate.time
-            val seconds = diff / 1000
-            val minutes = seconds / 60
-            val hours = minutes / 60
-            val days = hours / 24
-            activity.startDate
+
+        val diff: Long = Date(System.currentTimeMillis()).time - activity.startDate.time
+        val seconds = diff / 1000
+        val minutes = seconds / 60
+
+        builder.setPositiveButton(getString(R.string.dialog_activity_finish)) { _, _ ->
             activity.progressStatus = ProgressStatus.FINISHED
-            viewModel.finishActivity(activity)
+            viewModel.finishActivity(activity, minutes.toInt())
         }
-        builder.setNegativeButton(getString(R.string.dialog_activity_abandon)){ dialog,which ->
+        builder.setNegativeButton(getString(R.string.dialog_activity_abandon)) { _, _ ->
             activity.progressStatus = ProgressStatus.ABANDONED
-            viewModel.abandonActivity(activity)
+            viewModel.abandonActivity(activity, minutes.toInt())
         }
 
         val dialog: AlertDialog = builder.create()

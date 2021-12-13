@@ -67,10 +67,10 @@ class ActivityRepositoryImpl(
         }
     }
 
-    override suspend fun finishActivity(activity: Activity): Flow<ResultWrapper<Unit>> = flow {
+    override suspend fun finishActivity(activity: Activity, minutes: Int): Flow<ResultWrapper<Unit>> = flow {
         emit(ResultWrapper.Loading)
         runCatching {
-            activityDao.updateActivityProgress(activity.progressStatus, activity.key)
+            activityDao.updateActivityProgress(activity.progressStatus, activity.key, minutes)
         }.onSuccess {
             emit(ResultWrapper.Success(Unit))
         }.onFailure { throwable ->
@@ -80,10 +80,10 @@ class ActivityRepositoryImpl(
         }
     }
 
-    override suspend fun abandonActivity(activity: Activity): Flow<ResultWrapper<Unit>> = flow {
+    override suspend fun abandonActivity(activity: Activity, minutes: Int): Flow<ResultWrapper<Unit>> = flow {
         emit(ResultWrapper.Loading)
         runCatching {
-            activityDao.updateActivityProgress(activity.progressStatus, activity.key)
+            activityDao.updateActivityProgress(activity.progressStatus, activity.key, minutes)
         }.onSuccess {
             emit(ResultWrapper.Success(Unit))
         }.onFailure { throwable ->

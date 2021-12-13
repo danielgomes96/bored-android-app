@@ -15,6 +15,6 @@ interface ActivitiesDao {
     @Query("SELECT * FROM activities")
     fun getActivities(): List<ActivityLocal>
 
-    @Query("UPDATE activities SET progress=:progress WHERE `key` = :key")
-    fun updateActivityProgress(progress: ProgressStatus, key: String)
+    @Query("UPDATE activities SET progress=:progress, time_spent=:minutes WHERE `key` = :key")
+    fun updateActivityProgress(progress: ProgressStatus, key: String, minutes: Int)
 }

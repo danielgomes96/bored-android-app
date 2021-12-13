@@ -17,7 +17,8 @@ class ActivityRemoteMapper : BaseMapper<DTOActivity, Activity>() {
             entity.accessibility,
             ProgressStatus.IN_PROGRESS,
             Date(System.currentTimeMillis()),
-            Date(System.currentTimeMillis())
+            Date(System.currentTimeMillis()),
+            0
         )
     }
 }

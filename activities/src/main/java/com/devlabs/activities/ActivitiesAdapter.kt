@@ -8,12 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.devlabs.domain.entity.Activity
 import com.devlabs.domain.entity.ProgressStatus
+import java.util.*
 
 class ActivitiesAdapter(
-    private val activitiesList: List<Activity>,
+    private var activitiesList: List<Activity>,
     private val clickItem: (Activity) -> Unit,
     private val context: Context,
 ) : RecyclerView.Adapter<ActivitiesAdapter.Holder>() {
+
+    fun setupData(activityList: List<Activity>) {
+        this.activitiesList = activityList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesAdapter.Holder {
         return Holder(LayoutInflater.from(parent.context).inflate((R.layout.item_activity), parent, false))
@@ -30,6 +35,7 @@ class ActivitiesAdapter(
         private val tvProgress: TextView = view.findViewById(R.id.activity_progress)
         private val tvStartTime: TextView = view.findViewById(R.id.activity_start_time)
         private val tvEndTime: TextView = view.findViewById(R.id.activity_end_time)
+        private val tvSpent: TextView = view.findViewById(R.id.activity_time_spent)
 
         fun bind(context: Context, activity: Activity, clickItem: (Activity) -> Unit) = with (activity) {
             tvTitle.text = activity.activity
@@ -46,9 +52,13 @@ class ActivitiesAdapter(
             }
 
             tvStartTime.text = activity.startDate.toString()
+            tvEndTime.text = activity.endDate.toString()
+            tvSpent.text = String.format(context.getString(R.string.time_spent_text), activity.timeSpent.toString())
 
             itemView.setOnClickListener {
-                clickItem(activity)
+                if (activity.progressStatus == ProgressStatus.IN_PROGRESS) {
+                    clickItem(activity)
+                }
             }
         }
     }
